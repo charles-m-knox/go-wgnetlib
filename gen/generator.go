@@ -38,7 +38,11 @@ func (conf *Configuration) applySoftRules(w *WgConfig) error {
 	}
 
 	if w.AllowedIPs == "" {
-		w.AllowedIPs = DefaultAllowedIPs
+		if conf.GenerationParams.AllowedIPs == "" {
+			w.AllowedIPs = DefaultAllowedIPs
+		} else {
+			w.AllowedIPs = conf.GenerationParams.AllowedIPs
+		}
 	}
 
 	if w.DNS == "" && !w.IsServer { // don't set the dns for the server
