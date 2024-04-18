@@ -1,0 +1,25 @@
+---
+generationParams:
+  cidr: 10.0.0.0/16
+  dns: 10.0.0.1
+  server: 10.0.0.1
+  serverInterface: eth0
+  endpoint: 5.5.5.5
+  endpointPort: 51820
+  mtu: 1280
+  allowedIPs: 0.0.0.0/0
+  persistentKeepAlive: 25
+  name: ""
+  description: ""
+  extra: ""
+  regenerateKeys: false
+  resetAll: false
+  forceAllowedIPs: false
+  forcePersistentKeepAlive: false
+  forceMtu: false
+  forceEndpoint: false
+  forceEndpointPort: false
+  forceDns: false
+  forceName: false
+  forceDescription: false
+  forceExtra: false

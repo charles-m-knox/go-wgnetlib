@@ -1,0 +1,66 @@
+---
+# https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
+
+linters:
+  disable:
+    - varnamelen # doesn't like one-letter var names
+    - exhaustive # requires way too many switch...case statements
+    - gci # couldn't get it working
+    - exhaustivestruct
+    - exhaustruct
+    - gomnd # i like the concept but it comes up in too many places (magic numbers)
+    - gochecknoglobals
+    - goerr113
+    - funlen # too many lines in function
+    - gocognit # high cognitive complexity
+    - gocyclo # high cyclomatic complexity
+    - cyclop # high cyclomatic complexity
+    - maintidx # maintanibility index
+    - lll # long line length
+    # - deadcode
+    # - golint
+    # - ifshort
+    # - interfacer
+    # - maligned
+    # - nosnakecase
+    # - scopelint
+    # - structcheck
+    # - varcheck
+
+  # # Enable presets.
+  # # https://golangci-lint.run/usage/linters
+  # # Default: []
+  presets:
+    - bugs
+    - comment
+    - complexity
+    - error
+    - format
+    - import
+    - metalinter
+    - module
+    - performance
+    - sql
+    - style
+    - test
+    - unused
+
+linters-settings:
+  depguard:
+    rules:
+      # https://github.com/OpenPeeDeeP/depguard
+      Main:
+        files:
+          - "$all"
+          - "!$test"
+        listMode: "strict"
+        deny:
+          - pkg: io/ioutil
+            desc: "replaced by io and os packages since Go 1.16: https://tip.golang.org/doc/go1.16#ioutil"
+      Test:
+        files:
+          - "$test"
+        listMode: "lax"
+        deny:
+          - pkg: "github.com/stretchr/testify"
+            desc: "Please use standard library for tests"

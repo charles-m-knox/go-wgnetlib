@@ -64,15 +64,15 @@ GOSUMDB=off GOPROXY=direct go install gitea.cmcode.dev/cmcode/wgnetlib@latest
 `wgnetlib` can be used as a CLI tool, if desired - specify the `-i` flag for fancier terminal output:
 
 ```bash
-./wgnetlib -i -f output.yml -o output.yml
+./wgnetlib -i -f config.example.yml -o output.yml
 ```
 
-- specifying the `-f file.yml` flag will cause `file.yml` to be loaded on startup and its values will be reused for the next run
+- specifying the `-f config.example.yml` flag will cause `config.example.yml` to be loaded on startup and its values will be reused for the next run
 - specifying `-o output.yml` will write the output to `output.yml`
 
 ## Rough benchmarks
 
-- `/16`:-
+- `/16`:
   - 65,000 IP addresses
   - ~2GB RAM usage
   - 3.6 seconds

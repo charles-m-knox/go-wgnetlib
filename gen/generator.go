@@ -342,8 +342,6 @@ func (conf *Configuration) Generate(interactive bool) error {
 	// can accurately render a progress bar readout.
 	wgs := EstimateNetworkSize(conf.network)
 
-	// log.Printf("expecting %v ip addresses", wgs)
-
 	var multi pterm.MultiPrinter
 
 	var pbProcessed *pterm.ProgressbarPrinter
@@ -352,37 +350,18 @@ func (conf *Configuration) Generate(interactive bool) error {
 
 	var pbPostProcessing *pterm.ProgressbarPrinter
 
-	// var pbTotal *pterm.ProgressbarPrinter
-
-	// pbProcessedUpdate := func(amount int) {
-	// 	if interactive {
-	// 		pbProcessed.Current = amount
-	// 	}
-	// }
-
 	pbProcessedIncrement := func() {
 		if interactive {
 			pbProcessed.Increment()
 		}
 	}
 
-	// pbPreProcessedUpdate := func(amount int) {
-	// 	if interactive {
-	// 		pbPreProcessed.Current = amount
-	// 	}
-	// }
 	pbPreProcessedIncrement := func() {
 		if interactive {
 			pbPreProcessed.Increment()
 		}
 	}
 
-	// // pbTotalUpdate updates the total progress bar
-	// pbTotalUpdate := func(amount int) {
-	// 	if interactive {
-	// 		pbTotal.WithCurrent(amount)
-	// 	}
-	// }
 	pbPostProcessingIncrement := func() {
 		if interactive {
 			pbPostProcessing.Increment()
@@ -394,9 +373,10 @@ func (conf *Configuration) Generate(interactive bool) error {
 		// need to go through the total list of IP addresses at least twice
 		pbPreProcessed, _ = pterm.DefaultProgressbar.WithWriter(multi.NewWriter()).WithTotal(wgs).Start("Pre-processing IPs")
 		pbProcessed, _ = pterm.DefaultProgressbar.WithWriter(multi.NewWriter()).WithTotal(wgs).Start("Peers configured")
-		pbPostProcessing, _ = pterm.DefaultProgressbar.WithWriter(multi.NewWriter()).WithTotal(wgs).Start("Peers post-processed")
-		// pbTotal, _ = pterm.DefaultProgressbar.WithWriter(multi.NewWriter()).WithTotal(100).Start("Total")
-		multi.Start()
+		pbPostProcessing, _ = pterm.DefaultProgressbar.WithWriter(multi.NewWriter()).WithTotal(wgs).Start(
+			"Peers post-processed",
+		)
+		_, _ = multi.Start()
 	}
 
 	// take note of every IP address that we have to operate on
@@ -417,8 +397,6 @@ func (conf *Configuration) Generate(interactive bool) error {
 
 		// if the IP address ends with .0 or .255, skip it
 		if strings.HasSuffix(ipa.S, ".0") || strings.HasSuffix(ipa.S, ".255") {
-			// log.Println("skipping ipa:", ipa)
-
 			ip = NextIP(ip)
 
 			continue
@@ -445,13 +423,9 @@ func (conf *Configuration) Generate(interactive bool) error {
 		pbPostProcessing.Total = ips
 	}
 
-	// log.Printf("total IP addresses: %v", ips)
-
 	var progress int64
 
 	var server *WgConfig
-
-	// var serverPeers strings.Builder
 
 	// serverpeer list but each item is gzipped to conserve memory
 	spgz := []string{}
@@ -524,7 +498,6 @@ func (conf *Configuration) Generate(interactive bool) error {
 			}
 
 			mutex.Lock()
-			// serverPeers.WriteString(serverPeer)
 
 			spgz = append(spgz, serverPeerGz)
 			mutex.Unlock()
@@ -547,19 +520,7 @@ func (conf *Configuration) Generate(interactive bool) error {
 
 		atomic.AddInt64(progress, 1)
 
-		// msg := fmt.Sprintf(
-		// 	"[%v/%v]: Generating keys and configuring peers: Step 1/2",
-		// 	atomic.LoadInt64(progress),
-		// 	ips,
-		// )
-
-		// log.Println(msg)
-
-		// (*setProgressLabel)(msg)
-		// (*setProgressValue)(
-		// pbProcessedUpdate(int(math.Round(5 + (float64(atomic.LoadInt64(progress))/float64(ips))*(90))))
 		pbProcessedIncrement()
-		// )
 
 		return nil
 	}
@@ -581,9 +542,6 @@ func (conf *Configuration) Generate(interactive bool) error {
 	} else {
 		return fmt.Errorf("index of server not valid: %v", serverIPIndex)
 	}
-
-	// reconnect to allow the transaction to finish?
-	// database.Reconnect()
 
 	// now find the server we just created and assert that it's valid
 	server = &WgConfig{}
@@ -611,7 +569,6 @@ func (conf *Configuration) Generate(interactive bool) error {
 		return err
 	}
 
-	// for j, ip := range allIPs {
 	chunkSize := 1000
 	for j := 0; j < ips; j += chunkSize {
 		end := j + chunkSize
@@ -621,11 +578,8 @@ func (conf *Configuration) Generate(interactive bool) error {
 		}
 
 		var wg sync.WaitGroup
-		// for l := range allIPs[j:end] {
 		for l := j; l < end; l++ {
 			i := uint(l + 1) // the primary key in the db is 1-based index, not 0
-			// log.Printf("i=%v, l=%v, j=%v, end=%v", i, l, j, end)
-
 			if allIPs[l].IsServerIP {
 				continue
 			}
@@ -637,21 +591,11 @@ func (conf *Configuration) Generate(interactive bool) error {
 		wg.Wait()
 	}
 
-	// pbProcessedUpdate(ips)
-
 	if interactive {
 		pbProcessed.Current = ips - 1 // trick it into updating before stopping
 		pbProcessed.Increment()
 		pbProcessed.Stop()
 	}
-
-	// log.Printf(
-	// 	"[%v/%v]: generation step 2/2 complete",
-	// 	ips,
-	// 	ips,
-	// )
-
-	// pbProcessedUpdate(95)
 
 	// 3. Finally, update the server config.
 	// log.Println("saving final server config")

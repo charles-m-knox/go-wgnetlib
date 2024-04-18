@@ -80,7 +80,6 @@ func GzipString(s string) (string, error) {
 	}
 
 	err = w.Close()
-
 	if err != nil {
 		return "", err
 	}
