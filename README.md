@@ -97,3 +97,5 @@ go install github.com/charles-m-knox/go-wgnetlib@latest
     - offer gzip/xz compression for each file too
   - sqlite (I formerly wrote this to only work with sqlite so I do have the code elsewhere)
   - json
+
+- **TODO:** remove pkg/wgnetlib's dependency on pterm and instead allow for a function to be passed in that updates progress. `pterm` brings in a few unnecessary dependencies.
