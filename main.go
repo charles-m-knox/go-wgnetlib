@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/charles-m-knox/go-wgnetlib/gen"
+	gen "github.com/charles-m-knox/go-wgnetlib/pkg/wgnetlib"
 	"github.com/pterm/pterm"
 
 	"gopkg.in/yaml.v3"
