@@ -1,4 +1,4 @@
-module gitea.cmcode.dev/cmcode/wgnetlib
+module github.com/charles-m-knox/go-wgnetlib
 
 go 1.21.5
 

@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"gitea.cmcode.dev/cmcode/wgnetlib/gen"
+	"github.com/charles-m-knox/go-wgnetlib/gen"
 	"github.com/pterm/pterm"
 
 	"gopkg.in/yaml.v3"

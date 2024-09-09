@@ -11,7 +11,7 @@ For example, if you wanted to have a set of peers that all exist under `192.168.
 `wgnetlib` can be used as a Go package like this:
 
 ```bash
-GOSUMDB=off GOPROXY=direct go get -v gitea.cmcode.dev/cmcode/wgnetlib@latest
+go get -v github.com/charles-m-knox/go-wgnetlib@latest
 ```
 
 Then:
@@ -20,7 +20,7 @@ Then:
 package main
 
 import (
-    "gitea.cmcode.dev/cmcode/wgnetlib/gen"
+    "github.com/charles-m-knox/go-wgnetlib/gen"
 )
 
 func main() {
@@ -58,7 +58,7 @@ func main() {
 ### CLI
 
 ```bash
-GOSUMDB=off GOPROXY=direct go install gitea.cmcode.dev/cmcode/wgnetlib@latest
+go install github.com/charles-m-knox/go-wgnetlib@latest
 ```
 
 `wgnetlib` can be used as a CLI tool, if desired - specify the `-i` flag for fancier terminal output:
